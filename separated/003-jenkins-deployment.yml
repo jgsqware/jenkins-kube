@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: jenkins-scratch
+    namespace: kubernetes-plugin
+spec:
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                run: jenkins-scratch
+                jenkins.version: 2.31.1
+        spec:
+            containers:
+                - name: jenkins-scratch
+                  image: s00vl9961140.be.net.intra:8183/jenkins:2.32.1-alpine.minikube
+                  ports:
+                    - containerPort: 8080
+                  volumeMounts:
+                    - mountPath: /var/jenkins_home
+                      name: jenkins-scratch-data
+            volumes:
+                - name: jenkins-scratch-data
+                  persistentVolumeClaim:
+                    claimName: jenkins-scratch-data-pv-claim

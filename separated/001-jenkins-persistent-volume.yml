@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: jenkins-scratch-data-pv
+    namespace: kubernetes-plugin
+
+    # labels:
+    #     pv: jenkins-scratch-data-pv
+spec:
+    hostPath:
+        path: /data/jenkins-scratch
+    capacity:
+        storage: 50Mi
+    accessModes:
+        - ReadWriteOnce

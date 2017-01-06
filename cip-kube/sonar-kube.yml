@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: List
+items:
+    - apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: sonar-data
+        namespace: cip-kube
+      spec:
+        capacity:
+            storage: 100Mi
+        hostPath:
+            path: /opt/sonar/data
+        accessModes:
+            - ReadWriteOnce
+
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: sonar-data
+        namespace: cip-kube
+      spec:
+        resources:
+            requests:
+                storage: 100Mi
+        accessModes:
+            - ReadWriteOnce
+    
+    - apiVersion: extensions/v1beta1
+      kind: Deployment
+      metadata:
+        name: sonar
+        namespace: cip-kube
+      spec:
+        replicas: 1
+        template:
+            metadata:
+                name: sonar
+                namespace: cip-kube
+                labels:
+                    run: sonar
+            spec:
+                containers:
+                    - name: sonardb
+                      image: postgres:9.6-alpine
+                      env:
+                        - name: POSTGRES_USER
+                          value: sonar
+                        - name: POSTGRES_PASSWORD
+                          value: sonar
+                        - name: PGDATA
+                          value: /var/lib/postgresql/data/pgdata
+                      volumeMounts:
+                        - name: sonar-data
+                          mountPath: /var/lib/postgresql/data/pgdata
+                    - name: sonar
+                      image: sonarqube:6.2-alpine
+                      env:
+                        - name: SONARQUBE_JDBC_URL
+                          value: jdbc:postgresql://localhost:5432/sonar    
+                      ports:
+                        - containerPort: 9000
+                        - containerPort: 9092
+
+                volumes:
+                    - name: sonar-data
+                      persistentVolumeClaim:
+                        claimName: sonar-data
+
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: sonar
+        namespace: cip-kube
+      spec:
+        selector:
+            run: sonar
+        type: NodePort
+        ports:
+            - name: http
+              port: 9000
+                    
