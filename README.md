@@ -8,7 +8,7 @@ A tale to Kubernetes
 - [ ] [Logging](#logging)
 - [ ] [Blue-Green Deployments](#blue-green-deployments)
 - [ ] Service accouns
-- [ ] [Helm](#Helm) 
+- [ ] [Helm](#helm) 
 
 ## Prerequirement
 
