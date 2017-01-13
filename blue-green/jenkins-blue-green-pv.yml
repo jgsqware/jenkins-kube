@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: List
+items: 
+    - apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+          name: jenkins-data
+          namespace: jenkins-blue-green
+      spec:
+          hostPath:
+              path: /opt/jenkins-blue-green/data
+          capacity:
+              storage: 50Mi
+          accessModes:
+              - ReadWriteOnce
+
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+          name: jenkins-data
+          namespace: jenkins-blue-green
+      spec:
+          accessModes:
+              - ReadWriteOnce
+          resources:
+              requests:
+                  storage: 50Mi

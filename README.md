@@ -16,6 +16,12 @@ A tale to Kubernetes
 $ minikube ssh < ./minikube-provision.sh
 ```
 
+## Clean Setup
+
+```
+$ minikube ssh < ./minikube-clean.sh
+```
+
 ## Deploy the Continous Integration Platform on Kubernetes
 
 ```

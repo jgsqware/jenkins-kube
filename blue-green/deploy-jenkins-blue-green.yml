@@ -1,0 +1,3 @@
+kubectl create -f jenkins-blue-green.yml
+kubectl create -f jenkins-blue-green-pv.yml
+kubectl create -f jenkins-blue-green-2.19.3.yml

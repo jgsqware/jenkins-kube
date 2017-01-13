@@ -2,36 +2,11 @@
 apiVersion: v1
 kind: List
 items: 
-    - apiVersion: v1
-      kind: PersistentVolume
-      metadata:
-          name: jenkins-data
-          namespace: cip-kube
-      spec:
-          hostPath:
-              path: /opt/jenkins/data
-          capacity:
-              storage: 50Mi
-          accessModes:
-              - ReadWriteOnce
-
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-          name: jenkins-data
-          namespace: cip-kube
-      spec:
-          accessModes:
-              - ReadWriteOnce
-          resources:
-              requests:
-                  storage: 50Mi
-
     - apiVersion: extensions/v1beta1
       kind: Deployment
       metadata:
           name: jenkins
-          namespace: cip-kube
+          namespace: jenkins-blue-green
       spec:
           replicas: 2
           template:
@@ -42,7 +17,7 @@ items:
               spec:
                   containers:
                     - name: jenkins
-                      image: s00vl9961140.be.net.intra:8183/jenkins:2.32.1-alpine.minikube
+                      image: jgsqware/jenkins-kubernetes-minikube:2.19.3-alpine
                       ports:
                         - containerPort: 8080
                       volumeMounts:
@@ -57,7 +32,7 @@ items:
       kind: Service
       metadata: 
           name: jenkins
-          namespace: cip-kube
+          namespace: jenkins-blue-green
       spec:
           type: NodePort
           ports:
